@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>٣٦٥ هۆکار بۆ تۆ</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Tahoma, 'Noto Naskh Arabic', sans-serif;
+    /* ڕەنگی پاشبنە: شینی تاریک */
+    background: linear-gradient(135deg, #0a1128 0%, #12203b 50%, #0a1128 100%);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    /* ڕووناکییەکانی شین */
+    background:
+      radial-gradient(circle at 20% 30%, rgba(0,180,216,0.15), transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(144,224,239,0.1), transparent 50%);
+    pointer-events: none;
+  }
+  .container { position: relative; z-index: 1; width: 100%; max-width: 600px; }
+
+  /* شاشەی وشەی نهێنی */
+  #login {
+    text-align: center;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(0,180,216,0.25);
+    border-radius: 24px;
+    padding: 40px 30px;
+    backdrop-filter: blur(20px);
+  }
+  #login h1 { font-size: 1.8rem; margin-bottom: 12px; color: #00b4d8; }
+  #login p { opacity: 0.7; margin-bottom: 24px; font-size: 0.95rem; }
+  #login input {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,180,216,0.4);
+    background: rgba(0,0,0,0.3);
+    color: #fff;
+    font-size: 1rem;
+    text-align: center;
+    font-family: inherit;
+    outline: none;
+    transition: 0.3s;
+  }
+  #login input:focus { border-color: #00b4d8; box-shadow: 0 0 20px rgba(0,180,216,0.3); }
+  #login button {
+    margin-top: 18px;
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    /* دوگمەی شین */
+    background: linear-gradient(135deg, #00b4d8, #90e0ef);
+    color: #0a1128;
+    font-weight: bold;
+    font-size: 1rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  #login button:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,180,216,0.4); }
+  #error { color: #ff6b6b; margin-top: 12px; font-size: 0.9rem; display: none; }
+
+  /* شاشەی سەرەکی */
+  #main { display: none; text-align: center; }
+  .header { margin-bottom: 30px; }
+  .header h1 {
+    font-size: 1.6rem;
+    /* ناوی سەرەکی بە ڕەنگی شین */
+    background: linear-gradient(135deg, #00b4d8, #90e0ef);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .header p { opacity: 0.6; font-size: 0.9rem; }
+
+  .card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(0,180,216,0.25);
+    border-radius: 24px;
+    padding: 40px 28px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    animation: fadeIn 0.8s ease;
+    margin-bottom: 24px;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .day-label {
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    color: #00b4d8;
+    opacity: 0.8;
+    margin-bottom: 18px;
+  }
+  .reason {
+    font-size: 1.4rem;
+    line-height: 1.8;
+    font-weight: 500;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .counter {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(0,180,216,0.15);
+  }
+  .counter div { text-align: center; }
+  .counter .num {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #00b4d8;
+  }
+  .counter .lbl { font-size: 0.75rem; opacity: 0.6; margin-top: 4px; }
+
+  .progress-bar {
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 20px;
+  }
+  .progress-fill {
+    height: 100%;
+    /* شریتی پێشکەوتن بە ڕەنگی شین */
+    background: linear-gradient(90deg, #00b4d8, #90e0ef);
+    border-radius: 3px;
+    transition: width 1s ease;
+  }
+  .footer {
+    font-size: 0.85rem;
+    opacity: 0.5;
+    line-height: 1.8;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- شاشەی وشەی نهێنی -->
+  <div id="login">
+    <h1>💙 بۆ تۆ </h1>
+    <p>وشەی نهێنی بنووسە بۆ بینینی هۆکاری ئەمڕۆ</p>
+    <input type="password" id="pass" placeholder="وشەی نهێنی..." autocomplete="off">
+    <button onclick="checkPass()">بیکەرەوە</button>
+    <div id="error">وشەی نهێنی هەڵەیە</div>
+  </div>
+
+  <!-- شاشەی سەرەکی -->
+  <div id="main">
+    <div class="header">
+      <h1>٣٦٥ هۆکار</h1>
+      <p>هەر ڕۆژێک یەک هۆکار، بۆ هەموو ژیانم</p>
+    </div>
+
+    <div class="card">
+      <div class="day-label" id="dayLabel">ڕۆژی ١</div>
+      <div class="reason" id="reasonText">...</div>
+
+      <div class="counter">
+        <div>
+          <div class="num" id="hours">٠٠</div>
+          <div class="lbl">کاتژمێر</div>
+        </div>
+        <div>
+          <div class="num" id="mins">٠٠</div>
+          <div class="lbl">خولەک</div>
+        </div>
+        <div>
+          <div class="num" id="secs">٠٠</div>
+          <div class="lbl">چرکە</div>
+        </div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+    </div>
+
+    <div class="footer">
+      هەرچی ڕۆژ بێت، هەر تۆ دەوێت 💙
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ═══════════════════════════════════════
+  //  ١. وشەی نهێنی — لێرە بگۆڕە
+  // ═══════════════════════════════════════
+  const PASSWORD = "ژینم";
+
+  // ═══════════════════════════════════════
+  //  ٢. ڕێکەوتی دەستپێک — ڕۆژی ١
+  //  شێواز: ساڵ، مانگ-١، ڕۆژ
+  //  ١٠ی ئازاری ٢٠٢٦ = 2026, 2, 10
+  // ═══════════════════════════════════════
+  const START_DATE = new Date(2026, 2, 10);
+
+  // ═══════════════════════════════════════
+  //  ٣. هۆکارەکان (١٥٠ هۆکار)
+  // ═══════════════════════════════════════
+  const REASONS = [
+    "چونکە پێکەنینەکەت ڕۆژەکەم ڕووناک دەکات.",
+    "چونکە گوێم دەگریت بێ دادوەری.",
+    "چونکە لە کاتی سەختدا لەگەڵم دەمێنیت.",
+    "چونکە چاوەکانت چیرۆکی جوانیان تێدایە.",
+    "چونکە دڵت نەرم و دڵسۆزە.",
+    "چونکە یادەوەرییەکانمان تایبەتن.",
+    "چونکە هەرچەندە دووریت، هەست بە نزیکیت دەکەم.",
+    "چونکە ڕاستگۆیت.",
+    "چونکە ڕێزم دەگریت.",
+    "چونکە لەگەڵت ژیان خۆشترە.",
+    "چونکە دەنگت ئارامییە بۆ دڵم.",
+    "چونکە بەبێ هەوڵ، تێدەگەیت.",
+    "چونکە هەرگیز واز لە من ناهێنیت.",
+    "چونکە وشەکانت گەرم و دڵسۆزانەن.",
+    "چونکە بیرت لە وردەکارییەکان دەکەوێت.",
+    "چونکە لە کاتێکدا کە پێویستم بە کەسێک هەیە، تۆ ئەو کەسەیت.",
+    "چونکە خەونەکانت جوانن.",
+    "چونکە هەوڵ دەدەیت بۆ ئەوەی باشتر بیت.",
+    "چونکە تێدەگەیت بێ ئەوەی ڕوون بکەمەوە.",
+    "چونکە دڵنیایی دەدەیت بە دڵم.",
+    "چونکە پێکەوە پێدەکەنین.",
+    "چونکە تەنانەت لە دووریش، حەزم لێتە.",
+    "چونکە دەزانیت چ کاتێک بێدەنگ بیت.",
+    "چونکە ڕێز لە خەونەکانم دەگریت.",
+    "چونکە هەر جار کە پەیامت دێت، دڵم دەلەرزێت.",
+    "چونکە ناوت وەک مۆسیقایەکە بۆ گوێم.",
+    "چونکە لە هەموو جیهان، تۆ هەڵبژاردی من.",
+    "چونکە دڵنیام پێکەوە بەهێزترینین.",
+    "چونکە هەر ڕۆژێک فێری شتێکی نوێم دەکەیت.",
+    "چونکە لەبەرامبەر خۆم، باشترم دەکەیت.",
+    "چونکە سادەییت زۆر جوانە.",
+    "چونکە هەرگیز شتێک بە درۆ ناڵێیت.",
+    "چونکە دڵت هەرگیز دوور نەکەوتووە لە من.",
+    "چونکە کاتێک دەتبینم، جیهان دەوەستێت.",
+    "چونکە هەستەکانم بۆت ڕاستگۆیانەن.",
+    "چونکە هەر جار کە دەتبینم، وەک یەکەم جار دڵم دەلەرزێت.",
+    "چونکە شەوەکان بە بیرت کورت دەبن.",
+    "چونکە بەیانیت وەک هیواوە.",
+    "چونکە لەگەڵت، هەموو شتێک ئاسانە.",
+    "چونکە ترسم نەماوە لە دووری.",
+    "چونکە دەزانم کە دەگەڕێیتەوە.",
+    "چونکە هەر پەیامێکت وەک دیارییەکە.",
+    "چونکە تۆ هۆکاری پێکەنینەکەمی.",
+    "چونکە لە ناو دڵمدا ماڵت کردووە.",
+    "چونکە بێ تۆ، ژیان بێ ڕەنگە.",
+    "چونکە تۆ باشترین هاوڕێی منیت.",
+    "چونکە تۆ باشترین خۆشەویستی منیت.",
+    "چونکە تۆ باشترین شتە کە بۆم ڕوویداوە.",
+    "چونکە هەرچی ڕۆژ بێت، هەر تۆ دەوێت.",
+    "چونکە تۆ لە هەموو شتێک و لە خۆشم خۆشتریت.",
+    "چونکە هەر جار کە قسە دەکەیت، دڵم ئارام دەبێتەوە.",
+    "چونکە پێکەنینەکەت دەنگێکی جوانە بۆ ژیانم.",
+    "چونکە خەمخۆریت بۆ من وەک دڵنیاییەکی گەورەیە.",
+    "چونکە تەنانەت لە دووریش، هەست بە گەرمی دەستەکانت دەکەم.",
+    "چونکە هەر کاتێک پەیامێکت دێت، ڕۆژەکەم دەگۆڕێت.",
+    "چونکە دڵت وەک ئاوێنەیەکە، پاک و ڕوونە.",
+    "چونکە هەرگیز وا ناکەیت کەس هەست بە تەنیایی بکات.",
+    "چونکە لە کاتێکدا کە هەمووان دەڕۆن، تۆ دەمێنیتەوە.",
+    "چونکە ڕێگای قسەکردنت تایبەتە بە خۆت.",
+    "چونکە دەزانیت چۆن دڵم خۆش بکەیت.",
+    "چونکە لەبەر تۆ، داهاتوو ڕوونتر دەبینم.",
+    "چونکە بیرەوەرییەکانمان وەک گەوهەرن بۆ من.",
+    "چونکە هەر کاتێک دەتبینم، دڵم دەڕواتە لای تۆ.",
+    "چونکە چاوەکانت دەتوانن قسە بکەن بێ وشە.",
+    "چونکە لە ناو دڵتدا شوێنێکی گەورەم بۆ کراوە.",
+    "چونکە پێکەوە خەون دەبینین بۆ ژیانێکی جوان.",
+    "چونکە هەر کاتێک سەختە، تۆ ئاسانم دەکەیت.",
+    "چونکە ناوت وەک گۆرانییەکی خۆشە لە گوێمدا.",
+    "چونکە سادەیی و ڕاستگۆییت زۆر جوانە.",
+    "چونکە دڵنیام کە تۆ هەرگیز واز لە من ناهێنیت.",
+    "چونکە هەموو وردەکارییەکانت حەزم لێیە.",
+    "چونکە لە کاتی بێدەنگیدا، هەست بە ئارامی دەکەم لەگەڵت.",
+    "چونکە پاڵپشتی منیت لە هەموو بڕیارەکانمدا.",
+    "چونکە تۆ باشترین هاوڕێ و خۆشەویستیت بۆ من.",
+    "چونکە لە هەموو جیهاندا، تەنها تۆ دەوێت.",
+    "چونکە هەر ڕۆژێک کە تێدەپەڕێت، خۆشەویستیم بۆت زیاتر دەبێت.",
+    "چونکە لەبەر تۆ، واتای ژیانم گۆڕاوە.",
+    "چونکە دەنگت وەک مۆسیقایەکە کە دڵم ئارام دەکاتەوە.",
+    "چونکە ئەگەر جارێکی دیکە لەدایک ببمەوە، هەر تۆ هەڵدەبژێرم.",
+    "چونکە بیرت لە من دەکەوێت تەنانەت کاتێک سەرقاڵیت.",
+    "چونکە ڕۆژەکان بەبێ تۆ درێژ و ساردن.",
+    "چونکە تۆ هیوای دڵمی.",
+    "چونکە لەگەڵت هەست بە بەختەوەری دەکەم.",
+    "چونکە هەر شتێک بکەیت، جوانە لە چاوم.",
+    "چونکە دەتوانم هەموو نهێنییەکانم بۆ باس بکەم.",
+    "چونکە دڵت زۆر گەورەیە.",
+    "چونکە لە کاتی ناخۆشیدا، تۆ دەتبەمەوە سەر ژیان.",
+    "چونکە پێکەوە ژیانێکی جوان دروست دەکەین.",
+    "چونکە هەر کاتێک قسە دەکەیت، جیهان دەوەستێت.",
+    "چونکە من تەنها لەگەڵ تۆدا خۆم دەبینمەوە.",
+    "چونکە تۆ مامۆستای خۆشەویستیمیت.",
+    "چونکە هەرگیز ناتوانم بێ تۆ بژیم.",
+    "چونکە چاوەکانت دڵنیاییەکی گەورەن بۆ من.",
+    "چونکە هەموو شتێک لەگەڵ تۆ ئاسانە.",
+    "چونکە تۆ باشترین دیارییە کە ژیان بەخشیوە بە من.",
+    "چونکە هەر کاتێک دەتەوێت، من بۆت ئامادەیم.",
+    "چونکە پێکەنینەکەت دەنگێکی پیرۆزە بۆ گوێم.",
+    "چونکە هەرگیز هەست بە تەنیایی ناکەم کاتێک تۆ لەگەڵمیت.",
+    "چونکە من و تۆ، دوو نیمچەین کە تەواو بووین.",
+    "چونکە دڵت شوێنی ماڵی منە.",
+    "چونکە هەر ڕۆژێک شتێکی نوێ فێر دەبم لە تۆ.",
+    "چونکە تۆ ئەو کەسەیت کە هەمیشە دەمویست.",
+    "چونکە ئارامییەکەت وەک دەریایەکە بۆ دڵم.",
+    "چونکە هەموو شتێک لەبەر تۆ دەکەم.",
+    "چونکە تۆ هۆکاری پێکەنینەکەمی.",
+    "چونکە هەرگیز نامەوێت تۆ ناخۆش بکەم.",
+    "چونکە تۆ بەشێکی گرنگی ژیانمی.",
+    "چونکە لە کاتی سەختیدا، تۆ بەهێزم دەکەیت.",
+    "چونکە تۆ باشترین کچێکی جیهانیت.",
+    "چونکە لەگەڵت هەموو شتێک جوانترە.",
+    "چونکە دڵم تەنها بۆ تۆ لەدەوەستێت.",
+    "چونکە هەرگیز هەست بە بێزاری ناکەم لەگەڵت.",
+    "چونکە تۆ وەک ئەستێرەیەکیت لە ئاسمانی ژیانم.",
+    "چونکە گەرمی دڵت هەموو سەرمای ژیانم دەکوژێنێتەوە.",
+    "چونکە تۆ ئەو کەسەیت کە دەمەوێت پێکەوە پیر ببین.",
+    "چونکە لە هەموو کێشەکاندا، تۆ چارەسەریت.",
+    "چونکە پەیامەکانت وەک دیارییەکن بۆ من.",
+    "چونکە لەبەر تۆ، خەونەکانم ڕاستەقینە دەبن.",
+    "چونکە تۆ باشترین هاوڕێی منیت.",
+    "چونکە هەموو شتێک لەبارەت تۆ حەزم لێیە.",
+    "چونکە تۆ واتای خۆشەویستیمیت.",
+    "چونکە لە ناو دڵمدا، تەنها تۆ هەیت.",
+    "چونکە تۆ ئەو کەسەیت کە هەمیشە پێویستم پێیە.",
+    "چونکە هەرچەندە دووریت، لە دڵمدا نزیکیت.",
+    "چونکە تۆ باشترین شتە کە بۆم ڕوویداوە.",
+    "چونکە من تەنها تۆ دەوێت.",
+    "چونکە لەگەڵت ژیان واتایەکی هەیە.",
+    "چونکە تۆ هۆکاری ئارامی منیت.",
+    "چونکە دڵت پڕە لە خۆشەویستی بۆ من.",
+    "چونکە تۆ بەشێکی گرنگی منیت.",
+    "چونکە هەرگیز نامەوێت لێت جیاببمەوە.",
+    "چونکە لەبەر تۆ، هەموو شتێک ئاسانە.",
+    "چونکە تۆ باشترین کچێکی ژیانمی."
+  ];
+
+  // ═══════════════════════════════════════
+  //  لۆژیک — دەستی پێ مەدە
+  // ═══════════════════════════════════════
+  function checkPass() {
+    const val = document.getElementById('pass').value.trim();
+    if (val === PASSWORD) {
+      document.getElementById('login').style.display = 'none';
+      document.getElementById('main').style.display = 'block';
+      loadReason();
+      startCountdown();
+    } else {
+      document.getElementById('error').style.display = 'block';
+    }
+  }
+
+  document.getElementById('pass').addEventListener('keypress', e => {
+    if (e.key === 'Enter') checkPass();
+  });
+
+  function getDayIndex() {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const start = new Date(START_DATE.getFullYear(), START_DATE.getMonth(), START_DATE.getDate());
+    const diff = Math.floor((today - start) / 86400000);
+    return diff;
+  }
+
+  function toKurdish(n) {
+    const ku = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+    return String(n).split('').map(d => ku[d] || d).join('');
+  }
+
+  function loadReason() {
+    const idx = getDayIndex();
+    const dayNum = idx + 1;
+    document.getElementById('dayLabel').textContent = 'ڕۆژی ' + toKurdish(dayNum);
+
+    let text;
+    if (idx < 0) {
+      text = 'هێشتا دەست پێ نەکراوە... بەمنزیکانە.';
+    } else {
+      // دوای تەواو بوونی هەموو هۆکارەکان، دەگەڕێتەوە سەرەتا
+      text = REASONS[idx % REASONS.length];
+    }
+    document.getElementById('reasonText').textContent = text;
+
+    const pct = Math.min(100, (dayNum / 365) * 100);
+    document.getElementById('progress').style.width = pct + '%';
+  }
+
+  function startCountdown() {
+    setInterval(() => {
+      const now = new Date();
+      const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+      const diff = tomorrow - now;
+      const h = Math.floor(diff / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      document.getElementById('hours').textContent = toKurdish(String(h).padStart(2,'0'));
+      document.getElementById('mins').textContent = toKurdish(String(m).padStart(2,'0'));
+      document.getElementById('secs').textContent = toKurdish(String(s).padStart(2,'0'));
+    }, 1000);
+  }
+</script>
+</body>
+</html>
